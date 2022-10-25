@@ -50,7 +50,7 @@ const enterSite = () => {
         <img src="https://cdn.iconscout.com/icon/free/png-256/witch-105-1074593.png" class="card-img-top" style="width: 18rem;" alt="hoggy sorting hat">
         <h5 class="card-title">Join a Hoggy House!</h5>
         <p class="card-text">The sorting hat will sort you out.</p>
-        <a href="#" class="btn btn-primary">Join a House</a>
+        <a href="#" id='enterBtn' class="btn btn-primary">Join a House</a>
       </div>
     </div>
   `;
@@ -76,13 +76,28 @@ const mainSite = () => {
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+  <div class="row g-0">
+      <div class="col-sm-6 col-md-8">.col-sm-6 .col-md-8</div>
+      <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+    </div>
   `;
-  renderToDom("pageTwo",domString);
+  
+  document.getElementById("enter").style.display = 'none';
+  renderToDom("submit",domString);
 }; 
 
+//Query Selector that selects the "enter site button"
+const enterBtn = document.querySelector('#enterBtn'); 
 
+//Event Listener to Enter Site aka go to page two
+enter.addEventListener('click', event => {
+  if (event.target.id === 'enterBtn') {
+    enterSite();
+  }
+}); 
+
+//landing page
 const startApp = () => {
   enterSite();
-  mainSite();
 }
 startApp(); 
