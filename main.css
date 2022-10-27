@@ -5,3 +5,18 @@ body {
 h1 {
   color: yellow;
 }
+
+#cards {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 30px;
+  justify-content: flex-start;
+}
+
+#badcards {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 30px;
+  justify-content: flex-end;
+  
+}
