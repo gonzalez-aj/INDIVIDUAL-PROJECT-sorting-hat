@@ -41,7 +41,6 @@ const darkarts = [
 }
 ];
  
-const housesArray = ["Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"]; 
 
 // UTILITY FUNCTIONS  ~~re-usable b/c it's global, so we call it inside our functions local lexicon 
 //               (target div, string of html)
@@ -122,7 +121,9 @@ const cardsOnDom = (aDiv, array) => {
         ${student.name}
       </div>
       <img src="${student.image}" class="card-img-top" alt="${student.name} is a ${student.house}">
-      
+      <div class="card-footer">
+        ${student.house}
+      </div>
       <button class="btn btn-danger" id="delete--${student.id}">Expell Student!</button>
     </div> `;
   }
@@ -193,30 +194,33 @@ mainPage.addEventListener('click', (event) => {
 // // ******************** //
 // // ****** CREATE ****** //
 // // ******************** //
-
+//                     0               1            2             3     
+const housesArray = ["Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"]; 
 
 // // 1. select/target the form on the DOM
 const form = document.querySelector('form');
 
-// // 2. create a function that grabs all the values from the form, pushes the new object to the array, then reprints the DOM with the new wizard
-const createStudent = (event) => {
-event.preventDefault(); // EVERY TIME YOU CREATE A FORM, so it doesn't reset entirely
+// // 2. create a function that grabs the value from the form, pushes the new object to the array, then reprints the DOM with the new wizard
+const randNum = (num) => {
+  return Math.floor(Math.random() * num + 1);
+}; 
 
-const newStudentObj = {
-  id: students.length + 1, // this needs to be unique check out the ticket here: https://github.com/orgs/nss-evening-web-development/discussions/126 
-  name: document.querySelector("#name").value,
-  color: document.querySelector("#color").value,
-  specialSkill: document.querySelector("#specialSkill").value,
-  type: document.querySelector("#type").value,    
-  imageUrl: document.querySelector("#imageUrl").value
-}
+// const createStudent = (event) => {
+//   event.preventDefault(); // EVERY TIME YOU CREATE A FORM, so it doesn't reset entirely
+//   const randomHouse = () => 
+//   const newStudentObj = {
+//     id: students.length + 1, // this needs to be unique check out the ticket here: https://github.com/orgs/nss-evening-web-development/discussions/126 
+//     name: document.querySelector("#name").value,
+//     house: document.querySelector("#house").value,   
+//     image: document.querySelector("#image").value
+// }; 
 
-// //console.log(newPetObj); to test 
+// console.log(newStudentObj); //to test 
 
-// pets.push(newPetObj);
-// cardsOnDom(pets);
+// pets.push(newStudentObj);
+// cardsOnDom(students);
 // form.reset();
-// }
+// };
 
 // // 3. Add an event listener for the form submit and pass it the function (callback)
 
