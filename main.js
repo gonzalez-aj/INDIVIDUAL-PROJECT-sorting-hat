@@ -97,7 +97,7 @@ const mainSite = () => {
   renderToDom('#mainpg', domString);
 }; 
 
-//for filter buttons 
+//main pg query selector for filter buttons and Create! 
 const mainPage = document.querySelector('#mainpg'); 
 
 //Event Listener to render main site to DOM
@@ -109,7 +109,7 @@ landingPage.addEventListener('click', event => {
   }
 }); 
 
-// render to DOM utility
+// render to DOM utility + for new Cards
 const studentCards = document.querySelector('#cards'); 
 // put the cards on the DOM
 const cardsOnDom = (aDiv, array) => {
@@ -117,7 +117,7 @@ const cardsOnDom = (aDiv, array) => {
   for (const student of array) {
     cardString += `
     <div class="card text-center">
-      <div class="card-header">
+      <div class="card-header" id="name">
         ${student.name}
       </div>
       <img src="${student.image}" class="card-img-top" alt="${student.name} is a ${student.house}">
@@ -126,7 +126,7 @@ const cardsOnDom = (aDiv, array) => {
       </div>
       <button class="btn btn-danger" id="delete--${student.id}">Expell Student!</button>
     </div> `;
-  }
+  };
   renderToDom(aDiv, cardString);  
 };
 
@@ -196,35 +196,39 @@ mainPage.addEventListener('click', (event) => {
 // // ******************** //
 //                     0               1            2             3     
 const housesArray = ["Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"]; 
+const imageArray = ["https://live.staticflickr.com/7072/7172831889_9501462824_b.jpg", "https://live.staticflickr.com/8149/7305189426_47d462baf2_b.jpg", "https://live.staticflickr.com/7207/27713980556_3323db9b59_b.jpg", "https://live.staticflickr.com/8008/7305189598_e2d23b5c43_b.jpg"]; 
 
 // // 1. select/target the form on the DOM
 const form = document.querySelector('form');
 
 // // 2. create a function that grabs the value from the form, pushes the new object to the array, then reprints the DOM with the new wizard
-const randNum = (num) => {
-  return Math.floor(Math.random() * num + 1);
+//            (0,  4)
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }; 
 
-// const createStudent = (event) => {
-//   event.preventDefault(); // EVERY TIME YOU CREATE A FORM, so it doesn't reset entirely
-//   const randomHouse = () => 
-//   const newStudentObj = {
-//     id: students.length + 1, // this needs to be unique check out the ticket here: https://github.com/orgs/nss-evening-web-development/discussions/126 
-//     name: document.querySelector("#name").value,
-//     house: document.querySelector("#house").value,   
-//     image: document.querySelector("#image").value
-// }; 
+//to test randoNum
+//console.log(rand(0,4));
 
-// console.log(newStudentObj); //to test 
+const createStudent = (event) => {
+  event.preventDefault(); // EVERY TIME YOU CREATE A FORM, so it doesn't reset entirely
+  const newStudentObj = { 
+    id: students.length + 1, // this needs to be unique check out the ticket here: https://github.com/orgs/nss-evening-web-development/discussions/126 
+    name: studentCards.querySelector("#name").value,
+    house: housesArray[rand(0,4)],   
+    image: imageArray[rand(0,4)],
+}; 
 
-// pets.push(newStudentObj);
-// cardsOnDom(students);
-// form.reset();
-// };
+console.log(newStudentObj); //to test 
+
+students.push(newStudentObj);
+cardsOnDom(students);
+form.reset();
+};
 
 // // 3. Add an event listener for the form submit and pass it the function (callback)
 
-// form.addEventListener('submit', createAnimal);
+mainPage.addEventListener('submit', createStudent);
 
 // // ******************** //
 // // ****** DELETE ****** //
@@ -232,7 +236,7 @@ const randNum = (num) => {
 
 // // Here we will be using event bubbling
 // // 1. Target the app div
-// const app = document.querySelector("#root");
+// const app = document.querySelector("#");
 
 // // 2. Add an event listener to capture clicks
 
@@ -242,11 +246,11 @@ const randNum = (num) => {
 //   const [, id] = event.target.id.split("--");
 
 //   // 4. add logic to remove from array
-//   const index = pets.findIndex(event => event.id === Number(id));
-//   pets.splice(index, 1);
+//   const index = .findIndex(event => event.id === Number(id));
+//   .splice(index, 1);
 
 //   // 5. Repaint the DOM wiconst app = document.querySelector("#app");th the updated array
-//   cardsOnDom(pets);
+//   cardsOnDom(,);
 // }
 // });
 
