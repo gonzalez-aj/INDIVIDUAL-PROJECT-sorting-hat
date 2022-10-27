@@ -59,7 +59,7 @@ const enterSite = () => {
         <img src="https://cdn.iconscout.com/icon/free/png-256/witch-105-1074593.png" class="card-img-top" style="width: 18rem;" alt="hoggy sorting hat">
         <h5 class="card-title">Join a Hoggy House!</h5>
         <p class="card-text">The sorting hat will sort you out.</p>
-        <a href="#" id='enterBtn' class="btn btn-primary">Join a House</a>
+        <a href="#" id='enterBtn' class="btn btn-primary">Enter if you dare!</a>
       </div>
     </div>
   `;
@@ -77,7 +77,7 @@ const mainSite = () => {
         <label for="exampleInputPassword1" class="form-label">What's your name, wizard?</label>
         <input type="text" class="form-control" id="name" placeholder=""Harry Potter"" aria-label="What's your name?" required>
       </div> 
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" class="btn btn-primary">Get sorted</button>
     </form>
 
     <div>
@@ -98,6 +98,7 @@ const mainSite = () => {
   renderToDom('#mainpg', domString);
 }; 
 
+//for filter buttons 
 const mainPage = document.querySelector('#mainpg'); 
 
 //Event Listener to render main site to DOM
@@ -157,27 +158,35 @@ mainPage.addEventListener('click', (event) => {
   if (event.target.id === "ravenclawBtn") {
     const allRavenclaws = filter(students, 'Ravenclaw');
     cardsOnDom("#cards", allRavenclaws);
-  } 
+  }; 
 });
 
-// showAllSlytherins.addEventListener('click', () => {
-// const allSlytherins = filter(students, 'Slytherin');
-// cardsOnDom("#cards", allSlytherins);
-// });
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "slytherinBtn") {
+    const allSlytherins = filter(students, 'Slytherin');
+    cardsOnDom("#cards", allSlytherins);
+  };
+});
 
-// showAllGryffindors.addEventListener('click', () => {
-// const allGryffindors = filter(students, 'Gryffindor');
-// cardsOnDom("#cards", allGryffindors);
-// });
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "gryffindorBtn") {
+    const allGryffindors = filter(students, 'Gryffindor');
+    cardsOnDom("#cards", allGryffindors);
+  }; 
+});
 
-// showAllHufflepuffs.addEventListener('click', () => {
-//   const allHufflepuffs = filter(students, 'Hufflepuff');
-//   cardsOnDom("#cards", allHufflepuffs);
-//   });
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "hufflepuffBtn") {
+  const allHufflepuffs = filter(students, 'Hufflepuff');
+  cardsOnDom("#cards", allHufflepuffs);
+    };
+  }); 
 
-// showAllBtn.addEventListener('click', () => {
-//   cardsOnDom("#cards", students);
-//   });
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "allBtn") {
+    cardsOnDom("#cards", students);
+  };
+  });
 
 
 
@@ -187,20 +196,20 @@ mainPage.addEventListener('click', (event) => {
 
 
 // // 1. select/target the form on the DOM
-// const form = document.querySelector('form');
+const form = document.querySelector('form');
 
-// // 2. create a function that grabs all the values from the form, pushes the new object to the array, then repaints the DOM with the new teammate
-// const createAnimal = (event) => {
-// event.preventDefault(); // EVERY TIME YOU CREATE A FORM, so it doesn't reset entirely
+// // 2. create a function that grabs all the values from the form, pushes the new object to the array, then reprints the DOM with the new wizard
+const createStudent = (event) => {
+event.preventDefault(); // EVERY TIME YOU CREATE A FORM, so it doesn't reset entirely
 
-// const newPetObj = {
-//   id: pets.length + 1, // this needs to be unique check out the ticket here: https://github.com/orgs/nss-evening-web-development/discussions/126 
-//   name: document.querySelector("#name").value,
-//   color: document.querySelector("#color").value,
-//   specialSkill: document.querySelector("#specialSkill").value,
-//   type: document.querySelector("#type").value,    
-//   imageUrl: document.querySelector("#imageUrl").value
-// }
+const newStudentObj = {
+  id: students.length + 1, // this needs to be unique check out the ticket here: https://github.com/orgs/nss-evening-web-development/discussions/126 
+  name: document.querySelector("#name").value,
+  color: document.querySelector("#color").value,
+  specialSkill: document.querySelector("#specialSkill").value,
+  type: document.querySelector("#type").value,    
+  imageUrl: document.querySelector("#imageUrl").value
+}
 
 // //console.log(newPetObj); to test 
 
