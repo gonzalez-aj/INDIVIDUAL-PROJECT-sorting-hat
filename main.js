@@ -1,3 +1,4 @@
+//array of objects 
 const students = [
   {
     id: 1, 
@@ -31,70 +32,223 @@ const darkarts = [
   name: "He Who Shall Not Be Named",
   house: "Moldy Voldy's Army",
   image: "https://live.staticflickr.com/703/32062190795_b2a712ffae_b.jpg",
+},
+{
+  id: 2,
+  name: "Angie Gonzalez", 
+  house: "Moldy Voldy's Army",
+  image: "https://res.cloudinary.com/soundbetter/image/upload/c_fill,f_auto,g_face:auto,h_288,q_70,w_540/v1613517488/assets/photos/62567/Scan_154.jpg"
 }
 ];
+ 
 
-
-
-// UTILITY FUNCTIONS
+// UTILITY FUNCTIONS  ~~re-usable b/c it's global, so we call it inside our functions local lexicon 
+//               (target div, string of html)
 const renderToDom = (divId, textToRender) => {
-  const selectedElement = document.querySelector(divId);
-  selectedElement.innerHTML = textToRender;
+  const selectedElement = document.querySelector(divId); //passed divID, the div w/ this ID i'm assigning selectedElement 
+  selectedElement.innerHTML = textToRender; //going inside of of div and giving it a whole string of HTML 
 };
 
-// Landing Page
+
+// Landing Page 
 const enterSite = () => {
-  const domString = `
+  let domString = `
     <div class="card">
       <div class="card-body">
         <img src="https://cdn.iconscout.com/icon/free/png-256/witch-105-1074593.png" class="card-img-top" style="width: 18rem;" alt="hoggy sorting hat">
         <h5 class="card-title">Join a Hoggy House!</h5>
         <p class="card-text">The sorting hat will sort you out.</p>
-        <a href="#" id='enterBtn' class="btn btn-primary">Join a House</a>
+        <a href="#" id='enterBtn' class="btn btn-primary">Enter if you dare!</a>
       </div>
     </div>
   `;
   renderToDom('#enter', domString); //call it 
 };
 
+//Query Selector that selects the "enter site div"
+const landingPage = document.querySelector('#enter');
+
 //After Entering Site
 const mainSite = () => {
   const domString = `
     <form>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">What's your name, wizard?</label>
+        <input type="text" class="form-control" id="name" placeholder=""Harry Potter"" aria-label="What's your name?" required>
+      </div> 
+      <button type="submit" class="btn btn-primary">Get sorted</button>
+    </form>
+
+    <div>
+      <button type="button" class="btn btn-primary" id="ravenclawBtn">Ravenclaw</button>
+      <button type="button" class="btn btn-success" id="slytherinBtn">Slytherin</button>
+      <button type="button" class="btn btn-danger" id="gryffindorBtn">Gryffindor</button>
+      <button type="button" class="btn btn-warning" id="hufflepuffBtn">Hufflepuff</button>
+      <button type="button" class="btn btn-secondary" id="allBtn">All Houses</button>
     </div>
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1">
-    </div>
-    <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-  <div class="row g-0">
-      <div class="col-sm-6 col-md-8">.col-sm-6 .col-md-8</div>
-      <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+
+    <div class="row g-0 container-sm">
+      <div class="col-sm-6 col-md-8">Students</div>
+      <div class="col-6 col-md-4">Voldy Moldy's Army</div>
     </div>
   `;
   
-  document.getElementById("enter").style.display = 'none';
-  renderToDom("submit",domString);
+  landingPage.style.display = 'none';
+  renderToDom('#mainpg', domString);
 }; 
 
-//Query Selector that selects the "enter site button"
-const enterBtn = document.querySelector('#enterBtn'); 
+//for filter buttons 
+const mainPage = document.querySelector('#mainpg'); 
 
-//Event Listener to Enter Site aka go to page two
-enter.addEventListener('click', event => {
-  if (event.target.id === 'enterBtn') {
-    enterSite();
+//Event Listener to render main site to DOM
+landingPage.addEventListener('click', event => {
+  if (event.target.id === 'enterBtn') { 
+    mainSite();
+    cardsOnDom("#cards", students);
+    cardsOnDom("#badcards", darkarts);
   }
 }); 
+
+// render to DOM utility
+const studentCards = document.querySelector('#cards'); 
+// put the cards on the DOM
+const cardsOnDom = (aDiv, array) => {
+  let cardString = "";
+  for (const student of array) {
+    cardString += `
+    <div class="card text-center">
+      <div class="card-header">
+        ${student.name}
+      </div>
+      <img src="${student.image}" class="card-img-top" alt="${student.name} is a ${student.house}">
+      <div class="card-footer">
+        ${student.house}
+      </div>
+      <button class="btn btn-danger" id="delete--${student.id}">Expell Student!</button>
+    </div> `;
+  }
+  renderToDom(aDiv, cardString);  
+};
+
+// // function to filter 
+const filter = (array, typeString) => {
+  const typeArray = [];
+
+  for (const student of array) {
+    if (student.house === typeString) {
+      typeArray.push(student);
+    }
+  }; 
+  return typeArray;
+};
+
+// // ******************** //
+// // ****** EVENTS ****** //
+// // ******************** // event bubbling! 
+//event listeners have to "attach to" something that already exists in the html 
+// the funciton of the event listner can live outside of the event listener 
+
+// // 1. Target buttons on the DOM 
+//const showAllRavenclaws = document.querySelector("#ravenclawBtn");
+// const showAllSlytherins = document.querySelector("#slytherinBtn");
+// const showAllGryffindors = document.querySelector("#gryffindorBtn");
+// const showAllHufflepuffs = document.querySelector("#hufflepuffBtn");
+// const showAllBtn = document.querySelector("#allBtn");
+
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "ravenclawBtn") {
+    const allRavenclaws = filter(students, 'Ravenclaw');
+    cardsOnDom("#cards", allRavenclaws);
+  }; 
+});
+
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "slytherinBtn") {
+    const allSlytherins = filter(students, 'Slytherin');
+    cardsOnDom("#cards", allSlytherins);
+  };
+});
+
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "gryffindorBtn") {
+    const allGryffindors = filter(students, 'Gryffindor');
+    cardsOnDom("#cards", allGryffindors);
+  }; 
+});
+
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "hufflepuffBtn") {
+  const allHufflepuffs = filter(students, 'Hufflepuff');
+  cardsOnDom("#cards", allHufflepuffs);
+    };
+  }); 
+
+mainPage.addEventListener('click', (event) => {
+  if (event.target.id === "allBtn") {
+    cardsOnDom("#cards", students);
+  };
+  });
+
+
+
+// // ******************** //
+// // ****** CREATE ****** //
+// // ******************** //
+//                     0               1            2             3     
+const housesArray = ["Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"]; 
+
+// // 1. select/target the form on the DOM
+const form = document.querySelector('form');
+
+// // 2. create a function that grabs the value from the form, pushes the new object to the array, then reprints the DOM with the new wizard
+const randNum = (num) => {
+  return Math.floor(Math.random() * num + 1);
+}; 
+
+// const createStudent = (event) => {
+//   event.preventDefault(); // EVERY TIME YOU CREATE A FORM, so it doesn't reset entirely
+//   const randomHouse = () => 
+//   const newStudentObj = {
+//     id: students.length + 1, // this needs to be unique check out the ticket here: https://github.com/orgs/nss-evening-web-development/discussions/126 
+//     name: document.querySelector("#name").value,
+//     house: document.querySelector("#house").value,   
+//     image: document.querySelector("#image").value
+// }; 
+
+// console.log(newStudentObj); //to test 
+
+// pets.push(newStudentObj);
+// cardsOnDom(students);
+// form.reset();
+// };
+
+// // 3. Add an event listener for the form submit and pass it the function (callback)
+
+// form.addEventListener('submit', createAnimal);
+
+// // ******************** //
+// // ****** DELETE ****** //
+// // ******************** //
+
+// // Here we will be using event bubbling
+// // 1. Target the app div
+// const app = document.querySelector("#root");
+
+// // 2. Add an event listener to capture clicks
+
+// app.addEventListener('click', (event) => {
+// // 3. check e.target.id includes "delete"  target is a button 
+// if (event.target.id.includes("delete")) {
+//   const [, id] = event.target.id.split("--");
+
+//   // 4. add logic to remove from array
+//   const index = pets.findIndex(event => event.id === Number(id));
+//   pets.splice(index, 1);
+
+//   // 5. Repaint the DOM wiconst app = document.querySelector("#app");th the updated array
+//   cardsOnDom(pets);
+// }
+// });
 
 //landing page
 const startApp = () => {
