@@ -71,10 +71,10 @@ const landingPage = document.querySelector('#enter');
 //After Entering Site
 const mainSite = () => {
   const domString = `
-    <form>
+    <form id="form">
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label">What's your name, wizard?</label>
-        <input type="text" class="form-control" id="name" placeholder=""Harry Potter"" aria-label="What's your name?" required>
+        <input type="text" class="form-control" id="name" placeholder="Harry Potter" aria-label="What's your name?" required>
       </div> 
       <button type="submit" class="btn btn-primary">Get sorted</button>
     </form>
@@ -87,10 +87,17 @@ const mainSite = () => {
       <button type="button" class="btn btn-secondary" id="allBtn">All Houses</button>
     </div>
 
-    <div class="row g-0 container-sm">
-      <div class="col-sm-6 col-md-8">Students</div>
-      <div class="col-6 col-md-4">Voldy Moldy's Army</div>
+    <div class="container text-center">
+      <div class="row">
+        <div class="col">
+          Students
+        </div>
+        <div class="col">
+        Voldy Moldy's Army
+        </div>
+      </div> 
     </div>
+    
   `;
   
   landingPage.style.display = 'none';
@@ -105,18 +112,18 @@ landingPage.addEventListener('click', event => {
   if (event.target.id === 'enterBtn') { 
     mainSite();
     cardsOnDom("#cards", students);
-    cardsOnDom("#badcards", darkarts);
+    badCardsOnDom("#badcards", darkarts);
   }
 }); 
 
 // render to DOM utility + for new Cards
-const studentCards = document.querySelector('#cards'); 
-// put the cards on the DOM
+//const studentCards = document.querySelector('#cards'); 
+// put the good student cards on the DOM
 const cardsOnDom = (aDiv, array) => {
   let cardString = "";
   for (const student of array) {
     cardString += `
-    <div class="card text-center">
+    <div class="card text-center" style="width: 12rem; margin: 5px;">
       <div class="card-header" id="name">
         ${student.name}
       </div>
@@ -124,11 +131,30 @@ const cardsOnDom = (aDiv, array) => {
       <div class="card-footer">
         ${student.house}
       </div>
-      <button class="btn btn-danger" id="delete--${student.id}">Expell Student!</button>
+      <button class="btn btn-danger" id="expell--${student.id}">Expell Student!</button>
     </div> `;
   };
   renderToDom(aDiv, cardString);  
 };
+
+//put the baddies on the DOM
+const badCardsOnDom = (aDiv, array) => {
+  let cardString = "";
+  for (const student of array) {
+    cardString += `
+    <div class="card text-center" style="width: 12rem; margin: 5px;">
+      <div class="card-header" id="name">
+        ${student.name}
+      </div>
+      <img src="${student.image}" class="card-img-top" alt="${student.name} is apart of ${student.house}">
+      <div class="card-footer">
+        ${student.house}
+      </div>
+    </div> `;
+  };
+  renderToDom(aDiv, cardString);  
+};
+
 
 // // function to filter 
 const filter = (array, typeString) => {
@@ -199,7 +225,7 @@ const housesArray = ["Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"];
 const imageArray = ["https://live.staticflickr.com/7072/7172831889_9501462824_b.jpg", "https://live.staticflickr.com/8149/7305189426_47d462baf2_b.jpg", "https://live.staticflickr.com/7207/27713980556_3323db9b59_b.jpg", "https://live.staticflickr.com/8008/7305189598_e2d23b5c43_b.jpg"]; 
 
 // // 1. select/target the form on the DOM
-const form = document.querySelector('form');
+//const form = document.querySelector('form');
 
 // // 2. create a function that grabs the value from the form, pushes the new object to the array, then reprints the DOM with the new wizard
 //            (0,  4)
@@ -207,54 +233,71 @@ function rand(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }; 
 
-//to test randoNum
-//console.log(rand(0,4));
+// to create unique ID. ticket explained: https://github.com/orgs/nss-evening-web-development/discussions/126 
+const createId = (array) => {
+  if (array.length) {
+    const idArray = [];
+    for (const el of array) {
+      idArray.push(el.id);
+    }
+    return Math.max(...idArray) + 1;
+  } else {
+    return 0;
+  }
+};
 
 const createStudent = (event) => {
   event.preventDefault(); // EVERY TIME YOU CREATE A FORM, so it doesn't reset entirely
+  let randoNum = rand(0,housesArray.length); 
   const newStudentObj = { 
-    id: students.length + 1, // this needs to be unique check out the ticket here: https://github.com/orgs/nss-evening-web-development/discussions/126 
-    name: studentCards.querySelector("#name").value,
-    house: housesArray[rand(0,4)],   
-    image: imageArray[rand(0,4)],
+    id: createId(students), //students.length + 1, 
+    name: document.querySelector("#name").value,
+    house: housesArray[randoNum],   
+    image: imageArray[randoNum],
 }; 
 
-console.log(newStudentObj); //to test 
+//to test 
+//console.log(newStudentObj); 
 
 students.push(newStudentObj);
-cardsOnDom(students);
-form.reset();
+cardsOnDom("#cards", students);
+document.getElementById("name").value = '';
 };
-
+// you can't add an event listener, to something that hasn't been rendered
 // // 3. Add an event listener for the form submit and pass it the function (callback)
 
 mainPage.addEventListener('submit', createStudent);
 
 // // ******************** //
-// // ****** DELETE ****** //
+// // * Expell Student! *  //
 // // ******************** //
 
-// // Here we will be using event bubbling
-// // 1. Target the app div
-// const app = document.querySelector("#");
+// using event bubbling
+const expellStudent = () => {
+// 1. Target the cards div
+const expell = document.querySelector("#cards");
 
 // // 2. Add an event listener to capture clicks
+expell.addEventListener('click', (event) => {
+// 3. check e.target.id includes "expell" string target is a button 
+  if (event.target.id.includes("expell")) {
+    const [, id] = event.target.id.split("--");
 
-// app.addEventListener('click', (event) => {
-// // 3. check e.target.id includes "delete"  target is a button 
-// if (event.target.id.includes("delete")) {
-//   const [, id] = event.target.id.split("--");
+    // 4. add logic to remove from array
+    const index = students.findIndex(event => event.id === Number(id));
+    const baddies = students.splice(index, 1);
+    darkarts.push(baddies[0]); 
 
-//   // 4. add logic to remove from array
-//   const index = .findIndex(event => event.id === Number(id));
-//   .splice(index, 1);
-
-//   // 5. Repaint the DOM wiconst app = document.querySelector("#app");th the updated array
-//   cardsOnDom(,);
-// }
-// });
+    // 5. Repaint the DOM w/ the updated array
+    cardsOnDom("#cards", students);
+    badCardsOnDom("#badcards", darkarts);
+  }
+});
+};
+expellStudent(); 
 
 //landing page
+//last
 const startApp = () => {
   enterSite();
 }
